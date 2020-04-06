@@ -159,7 +159,7 @@ public class Parser<T, F> implements AutoCloseable, Iterable<T> {
                    AnnotationProcessor<F> annotationProcessor,
                    FieldProcessor<F> fieldProcessor) {
         this.rawEntityReader = rawEntityReader;
-        this.rawEntityReader.next(); // read header
+        this.rawEntityReader.next();
         this.beanType = beanType;
         fieldClasses = new ArrayList<>();
         fields = new ArrayList<>();
