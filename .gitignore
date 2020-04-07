@@ -7,6 +7,7 @@ build/
 *.generalLog
 *.log
 *.jks
+~$*
 
 ### STS ###
 .apt_generated
