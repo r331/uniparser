@@ -18,7 +18,7 @@ public class CsvParserTest {
     public void testCSV() {
         File file = new File(getClass().getClassLoader().getResource("cars.csv").getFile());
         Parser<Car, String> parser = Parser.<Car, String>builder()
-                .withRawEntityReader(new RowEntityReaderImpl(file))
+                .withRawEntityReader(new CSVEntityReaderImpl(file))
                 .withAnnotationProcessor(new AnnotationProcessorImpl<>(List.of()))
                 .withFieldHandler(of(
                         new IntegerFieldHandler(),

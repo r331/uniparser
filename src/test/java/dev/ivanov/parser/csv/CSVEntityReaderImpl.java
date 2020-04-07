@@ -10,12 +10,12 @@ import java.util.List;
 
 import static java.util.List.of;
 
-public class RowEntityReaderImpl implements RawEntityReader<String> {
+public class CSVEntityReaderImpl implements RawEntityReader<String> {
     private final BufferedReader br;
     private String nextLine;
 
     @SneakyThrows
-    public RowEntityReaderImpl(File file) {
+    public CSVEntityReaderImpl(File file) {
         this.br = new BufferedReader(new FileReader(file));
         this.nextLine = br.readLine();
     }

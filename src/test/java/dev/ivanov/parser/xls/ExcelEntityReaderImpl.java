@@ -16,13 +16,13 @@ import java.util.List;
 
 import static java.util.Collections.emptyList;
 
-public class RawEntityReaderImpl implements RawEntityReader<XSSFCell> {
+public class ExcelEntityReaderImpl implements RawEntityReader<XSSFCell> {
     private final XSSFWorkbook myExcelBook;
     private final XSSFSheet sheet;
     private final Iterator<Row> xssfRowIterator;
 
     @SneakyThrows
-    public RawEntityReaderImpl(File file, int sheet) {
+    public ExcelEntityReaderImpl(File file, int sheet) {
         myExcelBook = new XSSFWorkbook(new FileInputStream(file));
         this.sheet = myExcelBook.getSheetAt(sheet);
         this.xssfRowIterator = this.sheet.rowIterator();

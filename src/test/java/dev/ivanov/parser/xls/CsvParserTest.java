@@ -19,7 +19,7 @@ public class CsvParserTest {
     public void testXLS() {
         File file = new File(requireNonNull(getClass().getClassLoader().getResource("cars.xlsx")).getFile());
         Parser<Car, XSSFCell> parser = Parser.<Car, XSSFCell>builder()
-                .from(new RawEntityReaderImpl(file, 0))
+                .from(new ExcelEntityReaderImpl(file, 0))
                 .withAnnotationHandler(of())
                 .withFieldHandler(of(new IntegerFieldHandler(), new StringFieldHandler()))
                 .to(Car.class)
