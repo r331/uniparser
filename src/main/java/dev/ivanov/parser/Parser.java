@@ -15,7 +15,7 @@ import static org.apache.commons.lang3.reflect.FieldUtils.getAllFieldsList;
 
 public class Parser<T, F> implements AutoCloseable, Iterable<T> {
     private final Class<T> beanType;
-    private final List<Pair<Field, List<? extends Annotation>>> fields;
+    private final Map<Integer, Pair<Field, List<? extends Annotation>>> fields;
     private final List<List<Class<? extends Annotation>>> fieldClasses;
     private final AnnotationProcessor<F> annotationProcessor;
     private final FieldProcessor<F> fieldProcessor;
@@ -55,11 +55,11 @@ public class Parser<T, F> implements AutoCloseable, Iterable<T> {
     }
 
     private void updateFields(T bean, List<F> fieldValues) throws IllegalAccessException {
-        for (int i = 0; i < fields.size() && i < fieldValues.size(); i++) {
-            Field field = fields.get(i).getFirst();
-            List<? extends Annotation> annotations = fields.get(i).getSecond();
-            F rawData = fieldValues.get(i);
-            if (checkPresentCustomAnnotationOnField(fieldClasses.get(i), annotationProcessor.getAnnotations()))
+        for (Map.Entry<Integer, Pair<Field, List<? extends Annotation>>> pair : fields.entrySet()) {
+            Field field = pair.getValue().getFirst();
+            List<? extends Annotation> annotations = pair.getValue().getSecond();
+            F rawData = fieldValues.get(pair.getKey());
+            if (checkPresentCustomAnnotationOnField(fieldClasses.get(pair.getKey()), annotationProcessor.getAnnotations()))
                 fieldProcessor.process(field, bean, rawData);
             else
                 setFieldWithAnnotationRules(bean, field, annotations, rawData);
@@ -92,7 +92,7 @@ public class Parser<T, F> implements AutoCloseable, Iterable<T> {
                         if (annotation.annotationType() != Parsed.class)
                             continue;
                         Parsed parsed = (Parsed) annotation;
-                        fields.add(parsed.index(), new Pair<>(field, asList(annotations)));
+                        fields.put(parsed.index(), new Pair<>(field, asList(annotations)));
                         break;
                     }
                     fieldClasses.add(transformAnnotations(annotations));
@@ -162,7 +162,7 @@ public class Parser<T, F> implements AutoCloseable, Iterable<T> {
         this.rawEntityReader.next();
         this.beanType = beanType;
         fieldClasses = new ArrayList<>();
-        fields = new ArrayList<>();
+        fields = new HashMap<>();
         addFields();
         this.annotationProcessor = annotationProcessor;
         this.fieldProcessor = fieldProcessor;
